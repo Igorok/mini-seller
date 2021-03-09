@@ -1,0 +1,15 @@
+{
+	"MONGO_DB": "mini_seller",
+	"MONGO_HOST": "localhost",
+	"MONGO_PORT": 27017,
+	"MONGO_USER": "mongoadmin",
+	"MONGO_PASSWORD": "mongopassword",
+	"MONGO_AUTH": false,
+	"MONGO_REPLICASET": "",
+
+	"WEB_PORT": 3000,
+	"WEB_SALT": "DeL1VeRy",
+
+	"TOKEN_TTL": 86400,
+	"TOKEN_KEY": "aDpEpLs1eVcErReYt"
+}

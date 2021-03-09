@@ -1,0 +1,69 @@
+{
+    "employees": [
+        {
+            "id": "6044e66d2e46763b4f051014",
+            "name": "courier",
+            "sname": "restaurant",
+            "email": "courier@restaurant.com",
+            "phone": "79123456789",
+            "status": "active",
+            "Positions": [
+                {
+                    "IDOrganization": "6043d76e94df8de741c2c0d6",
+                    "Roles": [ "courier" ]
+                }
+            ]
+        },
+        {
+            "id": "6044e66d2e46763b4f051015",
+            "name": "director",
+            "sname": "restaurant",
+            "email": "director@restaurant.com",
+            "phone": "79123456788",
+            "status": "active",
+            "Positions": [
+                {
+                    "IDOrganization": "6043d76e94df8de741c2c0d6",
+                    "Roles": [ "courier", "employee", "manager" ]
+                },
+                {
+                    "IDOrganization": "6043d76e94df8de741c2c0d5",
+                    "Roles": [ "courier", "employee", "manager" ]
+                }
+            ]
+        },
+
+        {
+            "id": "6044e66d2e46763b4f051016",
+            "name": "courier",
+            "sname": "pizza",
+            "email": "courier@pizza.com",
+            "phone": "79123456787",
+            "status": "active",
+            "Positions": [
+                {
+                    "IDOrganization": "6043d76e94df8de741c2c0d5",
+                    "Roles": [ "courier" ]
+                },
+                {
+                    "IDOrganization": "6043d76e94df8de741c2c0d6",
+                    "Roles": [ "courier" ]
+                }
+            ]
+        },
+        {
+            "id": "6044e66d2e46763b4f051017",
+            "name": "employee",
+            "sname": "pizza",
+            "email": "employee@pizza.com",
+            "phone": "79123456786",
+            "status": "active",
+            "Positions": [
+                {
+                    "IDOrganization": "6043d76e94df8de741c2c0d5",
+                    "Roles": [ "employee" ]
+                }
+            ]
+        }
+    ]
+}

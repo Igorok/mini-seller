@@ -1,0 +1,105 @@
+
+{
+    "categories": [
+        {
+            "ID": "604488100f719d9c76a28fe3",
+            "Name": "Drinks",
+            "Status": "active"
+        },
+        {
+            "ID": "604488100f719d9c76a28fe4",
+            "Name": "Alcohol",
+            "Status": "active"
+        },
+        {
+            "ID": "604488100f719d9c76a28fe5",
+            "Name": "Steak",
+            "Status": "active"
+        },
+        {
+            "ID": "604488100f719d9c76a28fe6",
+            "Name": "Salad",
+            "Status": "active"
+        },
+        {
+            "ID": "604488100f719d9c76a28fe7",
+            "Name": "Pizza",
+            "Status": "active"
+        }
+    ],
+    "products": [
+        {
+            "ID": "604497558ffcad558eb8e1f2",
+            "IDCategory": "604488100f719d9c76a28fe5",
+            "IDOrganization": "6043d76e94df8de741c2c0d6",
+            "Name": "Steak New York",
+            "Price": 300,
+            "Count": 10,
+            "Status": "active"
+        },
+        {
+            "ID": "604497558ffcad558eb8e1f3",
+            "IDCategory": "604488100f719d9c76a28fe4",
+            "IDOrganization": "6043d76e94df8de741c2c0d6",
+            "Name": "Red wine",
+            "Price": 150,
+            "Count": 100,
+            "Status": "active"
+        },
+        {
+            "ID": "604497558ffcad558eb8e1f4",
+            "IDCategory": "604488100f719d9c76a28fe6",
+            "IDOrganization": "6043d76e94df8de741c2c0d6",
+            "Name": "Salad Cesar",
+            "Price": 200,
+            "Count": 10,
+            "Status": "active"
+        },
+        {
+            "ID": "604497558ffcad558eb8e1f5",
+            "IDCategory": "604488100f719d9c76a28fe3",
+            "IDOrganization": "6043d76e94df8de741c2c0d6",
+            "Name": "Cola",
+            "Price": 100,
+            "Count": 100,
+            "Status": "active"
+        },
+
+        {
+            "ID": "604497558ffcad558eb8e1f6",
+            "IDCategory": "604488100f719d9c76a28fe3",
+            "IDOrganization": "6043d76e94df8de741c2c0d5",
+            "Name": "Cola",
+            "Price": 50,
+            "Count": 100,
+            "Status": "active"
+        },
+        {
+            "ID": "604497558ffcad558eb8e1f7",
+            "IDCategory": "604488100f719d9c76a28fe7",
+            "IDOrganization": "6043d76e94df8de741c2c0d5",
+            "Name": "Chicken Barbecue",
+            "Price": 200,
+            "Count": 10,
+            "Status": "active"
+        },
+        {
+            "ID": "604497558ffcad558eb8e1f8",
+            "IDCategory": "604488100f719d9c76a28fe7",
+            "IDOrganization": "6043d76e94df8de741c2c0d5",
+            "Name": "Four Cheese",
+            "Price": 150,
+            "Count": 10,
+            "Status": "active"
+        },
+        {
+            "ID": "604497558ffcad558eb8e1f9",
+            "IDCategory": "604488100f719d9c76a28fe7",
+            "IDOrganization": "6043d76e94df8de741c2c0d5",
+            "Name": "Pepperoni",
+            "Price": 150,
+            "Count": 10,
+            "Status": "active"
+        }
+    ]
+}
