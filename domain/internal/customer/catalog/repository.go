@@ -7,6 +7,6 @@ import (
 
 // IRepository - access to data
 type IRepository interface {
-	GetCatalog(ctx context.Context, skip, limit int) ([]*productentity.ProductForCatalog, error)
+	GetCatalog(ctx context.Context, skip, limit int) ([]*productentity.ProductForCatalog, int64, error)
 	GetProductDetail(ctx context.Context, id string) (*productentity.ProductForCatalog, error)
 }

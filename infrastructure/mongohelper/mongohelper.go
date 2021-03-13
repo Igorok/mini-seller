@@ -25,10 +25,8 @@ func Connect() (*mongo.Database, error) {
 
 	replicaSet := viper.GetString("MONGO_REPLICASET")
 	if replicaSet != "" {
-		uri += "/" + dbname + "?replicaSet=" + replicaSet // + "&authSource=admin"
+		uri += "/" + dbname + "?replicaSet=" + replicaSet
 	}
-
-	fmt.Println("uri", uri)
 
 	// create connection
 	client, err := mongo.NewClient(options.Client().ApplyURI(uri))

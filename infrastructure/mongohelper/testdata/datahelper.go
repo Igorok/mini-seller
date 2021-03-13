@@ -15,11 +15,24 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// InsertOrganizations - insert test data for organizations
-func InsertOrganizations(db *mongo.Database) {
-	type OrganizationData struct {
-		Organizations []organizationentity.Organization
-	}
+// OrganizationData - dto for organization test data
+type OrganizationData struct {
+	Organizations []organizationentity.Organization
+}
+
+// ProductsData - dto for products test data
+type ProductsData struct {
+	Categories []productcategoryentity.ProductCategory
+	Products   []productentity.Product
+}
+
+// EmployeeData - dto for employee test data
+type EmployeeData struct {
+	Employees []employeeentity.Employee
+}
+
+// GetOrganizations - read json of organizations
+func GetOrganizations() (*OrganizationData, error) {
 
 	content, err := ioutil.ReadFile("infrastructure/mongohelper/testdata/organization.json")
 	if err != nil {
@@ -30,6 +43,51 @@ func InsertOrganizations(db *mongo.Database) {
 	err = json.Unmarshal(content, &orgData)
 	if err != nil {
 		log.Fatal("Unmarshal: ", err)
+		return nil, err
+	}
+
+	return &orgData, nil
+}
+
+// GetProducts - read json of products
+func GetProducts() (*ProductsData, error) {
+	content, err := ioutil.ReadFile("infrastructure/mongohelper/testdata/products.json")
+	if err != nil {
+		log.Fatal("Error when opening file: ", err)
+	}
+
+	var productData ProductsData
+	err = json.Unmarshal(content, &productData)
+	if err != nil {
+		log.Fatal("Unmarshal: ", err)
+		return nil, err
+	}
+
+	return &productData, nil
+}
+
+// GetEmployee - read json of employee
+func GetEmployee() (*EmployeeData, error) {
+	content, err := ioutil.ReadFile("infrastructure/mongohelper/testdata/employee.json")
+	if err != nil {
+		log.Fatal("Error when opening file: ", err)
+	}
+
+	var emplData EmployeeData
+	err = json.Unmarshal(content, &emplData)
+	if err != nil {
+		log.Fatal("Unmarshal: ", err)
+		return nil, err
+	}
+
+	return &emplData, nil
+}
+
+// InsertOrganizations - insert test data for organizations
+func InsertOrganizations(db *mongo.Database) {
+	orgData, err := GetOrganizations()
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	organizations := make([]interface{}, len(orgData.Organizations))
@@ -53,18 +111,7 @@ func InsertOrganizations(db *mongo.Database) {
 
 // InsertProducts - insert test data for categories and products
 func InsertProducts(db *mongo.Database) {
-	type ProductsData struct {
-		Categories []productcategoryentity.ProductCategory
-		Products   []productentity.Product
-	}
-
-	content, err := ioutil.ReadFile("infrastructure/mongohelper/testdata/products.json")
-	if err != nil {
-		log.Fatal("Error when opening file: ", err)
-	}
-
-	var productData ProductsData
-	err = json.Unmarshal(content, &productData)
+	productData, err := GetProducts()
 	if err != nil {
 		log.Fatal("Unmarshal: ", err)
 	}
@@ -105,17 +152,7 @@ func InsertProducts(db *mongo.Database) {
 
 // InsertEmployee - insert test data for employee
 func InsertEmployee(db *mongo.Database) {
-	type EmployeeData struct {
-		Employees []employeeentity.Employee
-	}
-
-	content, err := ioutil.ReadFile("infrastructure/mongohelper/testdata/employee.json")
-	if err != nil {
-		log.Fatal("Error when opening file: ", err)
-	}
-
-	var emplData EmployeeData
-	err = json.Unmarshal(content, &emplData)
+	emplData, err := GetEmployee()
 	if err != nil {
 		log.Fatal("Unmarshal: ", err)
 	}

@@ -1,4 +1,4 @@
-package catalog
+package usecase
 
 import (
 	"context"
@@ -17,7 +17,11 @@ func NewUseCase(repository catalog.IRepository) UseCase {
 }
 
 // GetCatalog - list of products
-func (uc UseCase) GetCatalog(ctx context.Context, skip, limit int) ([]*productentity.ProductForCatalog, error) {
+func (uc UseCase) GetCatalog(ctx context.Context, skip, limit int) ([]*productentity.ProductForCatalog, int64, error) {
+	if limit == 0 || limit > 100 {
+		return nil, 0, catalog.ErrCatalogLimit
+	}
+
 	return uc.repository.GetCatalog(ctx, skip, limit)
 }
 

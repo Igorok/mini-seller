@@ -1,14 +1,11 @@
-package catalog
+package repository
 
 import (
 	"context"
-	"log"
 	"mini-seller/domain/common/entities/productentity"
-	"mini-seller/domain/internal/customer/catalog"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -24,19 +21,19 @@ func NewCatalogRepository(db *mongo.Database) *Repository {
 	}
 }
 
-// commonPipeline - for detail and list info
-var commonPipeline = []bson.D{
-	{{"$sort", bson.M{
-		"_id": 1,
-	}}},
+// sortPipeline - sort by id
+var sortPipeline = bson.D{{"$sort", bson.M{
+	"_id": 1,
+}}}
 
+// lookupPipeline - join organizations and product_categories
+var lookupPipeline = []bson.D{
 	{{"$lookup", bson.M{
 		"from":         "organizations",
 		"localField":   "_id_org",
 		"foreignField": "_id",
 		"as":           "Organization",
 	}}},
-
 	{{"$lookup", bson.M{
 		"from":         "product_categories",
 		"localField":   "_id_cat",
@@ -45,12 +42,11 @@ var commonPipeline = []bson.D{
 	}}},
 
 	{{"$unwind", "$Organization"}},
-
 	{{"$unwind", "$Category"}},
 }
 
-// commonAggregate - request for aggregation of products info
-func commonAggregate(db *mongo.Database, pipeline []bson.D) ([]*productentity.ProductForCatalog, error) {
+// aggregateProducts - request for aggregation products info
+func aggregateProducts(db *mongo.Database, pipeline []bson.D) ([]*productentity.ProductForCatalog, error) {
 	// request
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -77,43 +73,4 @@ func commonAggregate(db *mongo.Database, pipeline []bson.D) ([]*productentity.Pr
 	}
 
 	return products, nil
-}
-
-// GetCatalog - get list of products from mongodb
-func (cRepo Repository) GetCatalog(ctx context.Context, skip, limit int) ([]*productentity.ProductForCatalog, error) {
-	// merge query
-	pipeline := []bson.D{
-		{{"$match", bson.M{
-			"status": catalog.StatusActive,
-		}}},
-	}
-	pipeline = append(pipeline, commonPipeline...)
-
-	// get data
-	return commonAggregate(cRepo.db, pipeline)
-}
-
-// GetProductDetail - get details for product from mongodb
-func (cRepo Repository) GetProductDetail(ctx context.Context, id string) (*productentity.ProductForCatalog, error) {
-	ID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
-
-	// merge query
-	pipeline := []bson.D{
-		{{"$match", bson.M{
-			"_id": ID,
-		}}},
-	}
-	pipeline = append(pipeline, commonPipeline...)
-
-	// get data
-	products, err := commonAggregate(cRepo.db, pipeline)
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
-
-	return products[0], nil
 }

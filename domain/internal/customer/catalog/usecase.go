@@ -7,6 +7,6 @@ import (
 
 // IUseCase - use case for business logic
 type IUseCase interface {
-	GetCatalog(ctx context.Context, skip, limit int) ([]*productentity.ProductForCatalog, error)
+	GetCatalog(ctx context.Context, skip, limit int) ([]*productentity.ProductForCatalog, int64, error)
 	GetProductDetail(ctx context.Context, id string) (*productentity.ProductForCatalog, error)
 }
