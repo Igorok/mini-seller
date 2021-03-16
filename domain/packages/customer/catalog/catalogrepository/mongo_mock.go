@@ -1,11 +1,11 @@
-package repository
+package catalogrepository
 
 import (
 	"context"
 	"mini-seller/domain/common/entities/organizationentity"
 	"mini-seller/domain/common/entities/productcategoryentity"
 	"mini-seller/domain/common/entities/productentity"
-	"mini-seller/domain/internal/customer/catalog"
+	"mini-seller/domain/packages/customer/catalog"
 	"mini-seller/infrastructure/mongohelper/testdata"
 )
 

@@ -36,3 +36,9 @@ type OrganizationForCatalog struct {
 	Phone string
 	Email string
 }
+
+// CatalogData - entity with data for catalog
+type CatalogData struct {
+	Products []*ProductForCatalog
+	Count    int64
+}

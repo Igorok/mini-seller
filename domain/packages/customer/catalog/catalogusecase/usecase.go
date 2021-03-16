@@ -1,9 +1,9 @@
-package usecase
+package catalogusecase
 
 import (
 	"context"
 	"mini-seller/domain/common/entities/productentity"
-	"mini-seller/domain/internal/customer/catalog"
+	"mini-seller/domain/packages/customer/catalog"
 )
 
 // UseCase - use case for business logic
@@ -17,12 +17,17 @@ func NewUseCase(repository catalog.IRepository) UseCase {
 }
 
 // GetCatalog - list of products
-func (uc UseCase) GetCatalog(ctx context.Context, skip, limit int) ([]*productentity.ProductForCatalog, int64, error) {
+func (uc UseCase) GetCatalog(ctx context.Context, skip, limit int) (*productentity.CatalogData, error) {
 	if limit == 0 || limit > 100 {
-		return nil, 0, catalog.ErrCatalogLimit
+		return &productentity.CatalogData{}, catalog.ErrCatalogLimit
 	}
 
-	return uc.repository.GetCatalog(ctx, skip, limit)
+	products, count, err := uc.repository.GetCatalog(ctx, skip, limit)
+	if err != nil {
+		return &productentity.CatalogData{}, err
+	}
+
+	return &productentity.CatalogData{Products: products, Count: count}, nil
 }
 
 // GetProductDetail - details for products

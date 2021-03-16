@@ -29,7 +29,7 @@ go get gopkg.in/go-playground/validator.v9
 ```
 
 ### Mongo
-Dtiver for mongodb
+Driver for mongodb
 ```
 go get go.mongodb.org/mongo-driver
 ```
@@ -45,10 +45,42 @@ Gin is a web framework written in Go
 go get -u github.com/gin-gonic/gin
 ```
 
+### GraphQL
+GraphQL is kind of webapi, it provide a query language, understandable description of the data in your API and has very powerful playground.
+```
+go get github.com/graphql-go/graphql
+```
 
+Query
+```
+query getCatalog($skip: Int, $limit: Int) {
+  getCatalog(skip: $skip, limit: $limit) {
+    products {
+      id
+      name
+      price
+      count
+      Organization {
+        id
+        name
+      }
+      Category {
+        id
+        name
+      }
+    }
+    count
+  }
+}
+```
 
-
-
+Variables
+```
+{
+    "skip": 2,
+    "limit": 2
+}
+```
 
 
 

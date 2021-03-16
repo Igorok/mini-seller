@@ -1,10 +1,10 @@
-package repository
+package catalogrepository
 
 import (
 	"context"
 	"log"
 	"mini-seller/domain/common/entities/productentity"
-	"mini-seller/domain/internal/customer/catalog"
+	"mini-seller/domain/packages/customer/catalog"
 	"sync"
 	"time"
 

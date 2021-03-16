@@ -1,9 +1,9 @@
-package usecase
+package catalogusecase
 
 import (
 	"context"
-	"mini-seller/domain/internal/customer/catalog"
-	"mini-seller/domain/internal/customer/catalog/repository"
+	"mini-seller/domain/packages/customer/catalog"
+	"mini-seller/domain/packages/customer/catalog/catalogrepository"
 	"os"
 	"testing"
 
@@ -19,32 +19,32 @@ func TestMain(m *testing.M) {
 func TestGetCatalog(t *testing.T) {
 	t.Log("Test product usecase list")
 
-	catalogRepo := repository.NewCatalogRepositoryMock()
+	catalogRepo := catalogrepository.NewCatalogRepositoryMock()
 	catUseCase := NewUseCase(catalogRepo)
 
 	// test validation
-	catalogProd, count, err := catUseCase.GetCatalog(context.TODO(), 0, 1000)
-	assert.Nil(t, catalogProd)
+	catalogProd, err := catUseCase.GetCatalog(context.TODO(), 0, 1000)
+	assert.Nil(t, catalogProd.Products)
 	assert.Equal(t, err, catalog.ErrCatalogLimit)
 
-	catalogProd, count, err = catUseCase.GetCatalog(context.TODO(), 0, 0)
-	assert.Nil(t, catalogProd)
+	catalogProd, err = catUseCase.GetCatalog(context.TODO(), 0, 0)
+	assert.Nil(t, catalogProd.Products)
 	assert.Equal(t, err, catalog.ErrCatalogLimit)
 
 	// test use case
-	catalogProd, count, err = catUseCase.GetCatalog(context.TODO(), 2, 2)
+	catalogProd, err = catUseCase.GetCatalog(context.TODO(), 2, 2)
 	assert.Nil(t, err)
-	assert.Equal(t, count, int64(8))
-	assert.Equal(t, len(catalogProd), 2)
-	assert.Equal(t, catalogProd[0].Name, "Salad Cesar")
-	assert.Equal(t, catalogProd[0].Category.Name, "Salad")
-	assert.Equal(t, catalogProd[0].Organization.Name, "restaurant")
+	assert.Equal(t, catalogProd.Count, int64(8))
+	assert.Equal(t, len(catalogProd.Products), 2)
+	assert.Equal(t, catalogProd.Products[0].Name, "Salad Cesar")
+	assert.Equal(t, catalogProd.Products[0].Category.Name, "Salad")
+	assert.Equal(t, catalogProd.Products[0].Organization.Name, "restaurant")
 }
 
 func TestGetProductDetail(t *testing.T) {
 	t.Log("Test product usecase detail")
 
-	catalogRepo := repository.NewCatalogRepositoryMock()
+	catalogRepo := catalogrepository.NewCatalogRepositoryMock()
 	catUseCase := NewUseCase(catalogRepo)
 
 	product, err := catUseCase.GetProductDetail(context.TODO(), "")
