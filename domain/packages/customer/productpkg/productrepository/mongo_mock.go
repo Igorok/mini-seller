@@ -1,21 +1,21 @@
-package catalogrepository
+package productrepository
 
 import (
 	"context"
 	"mini-seller/domain/common/entities/organizationentity"
 	"mini-seller/domain/common/entities/productcategoryentity"
 	"mini-seller/domain/common/entities/productentity"
-	"mini-seller/domain/packages/customer/catalog"
+	"mini-seller/domain/packages/customer/productpkg"
 	"mini-seller/infrastructure/mongohelper/testdata"
 )
 
 // RepositoryMock - mock instead database
 type RepositoryMock struct {
-	productList []*productentity.ProductForCatalog
+	productList []*productentity.ProductForList
 }
 
-// NewCatalogRepositoryMock - constructor for mock of repository with fixed data
-func NewCatalogRepositoryMock() *RepositoryMock {
+// NewProductRepositoryMock - constructor for mock of repository with fixed data
+func NewProductRepositoryMock() *RepositoryMock {
 	orgData, _ := testdata.GetOrganizations()
 	prodData, _ := testdata.GetProducts()
 
@@ -29,19 +29,19 @@ func NewCatalogRepositoryMock() *RepositoryMock {
 		catById[cat.ID] = cat
 	}
 
-	productList := make([]*productentity.ProductForCatalog, len(prodData.Products))
+	productList := make([]*productentity.ProductForList, len(prodData.Products))
 	for i, prod := range prodData.Products {
-		productList[i] = &productentity.ProductForCatalog{
+		productList[i] = &productentity.ProductForList{
 			ID:     prod.ID,
 			Name:   prod.Name,
 			Price:  prod.Price,
 			Count:  prod.Count,
 			Status: prod.Status,
-			Category: productentity.CategoryForCatalog{
+			Category: productentity.CategoryForProduct{
 				ID:   prod.IDCategory,
 				Name: catById[prod.IDCategory].Name,
 			},
-			Organization: productentity.OrganizationForCatalog{
+			Organization: productentity.OrganizationForProduct{
 				ID:    prod.IDOrganization,
 				Name:  orgById[prod.IDOrganization].Name,
 				Phone: orgById[prod.IDOrganization].Phone,
@@ -53,18 +53,18 @@ func NewCatalogRepositoryMock() *RepositoryMock {
 	return &RepositoryMock{productList: productList}
 }
 
-// GetCatalog - mock for products list
-func (rm RepositoryMock) GetCatalog(ctx context.Context, skip, limit int) ([]*productentity.ProductForCatalog, int64, error) {
+// GetProductList - mock for products list
+func (rm RepositoryMock) GetProductList(ctx context.Context, skip, limit int) ([]*productentity.ProductForList, int64, error) {
 	prodList := rm.productList[skip : skip+limit]
 	return prodList, int64(len(rm.productList)), nil
 }
 
-// GetCatalog - mock for product detail
-func (rm RepositoryMock) GetProductDetail(ctx context.Context, id string) (*productentity.ProductForCatalog, error) {
+// GetProductList - mock for product detail
+func (rm RepositoryMock) GetProductDetail(ctx context.Context, id string) (*productentity.ProductForList, error) {
 	for _, product := range rm.productList {
 		if product.ID == id {
 			return product, nil
 		}
 	}
-	return nil, catalog.ErrProductNotFound
+	return nil, productpkg.ErrProductNotFound
 }

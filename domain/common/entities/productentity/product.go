@@ -12,33 +12,33 @@ type Product struct {
 	Status         string
 }
 
-// ProductForCatalog - entity for catalog of products
-type ProductForCatalog struct {
+// ProductForList - entity for catalog of products
+type ProductForList struct {
 	ID           string
-	Category     CategoryForCatalog
-	Organization OrganizationForCatalog
+	Category     CategoryForProduct
+	Organization OrganizationForProduct
 	Name         string
 	Price        int
 	Count        int
 	Status       string
 }
 
-// CategoryForCatalog - for catalog of products
-type CategoryForCatalog struct {
+// CategoryForProduct - for catalog of products
+type CategoryForProduct struct {
 	ID   string
 	Name string
 }
 
-// OrganizationForCatalog - for catalog of products
-type OrganizationForCatalog struct {
+// OrganizationForProduct - for catalog of products
+type OrganizationForProduct struct {
 	ID    string
 	Name  string
 	Phone string
 	Email string
 }
 
-// CatalogData - entity with data for catalog
-type CatalogData struct {
-	Products []*ProductForCatalog
+// ProductList - entity with data for catalog
+type ProductList struct {
+	Products []*ProductForList
 	Count    int64
 }

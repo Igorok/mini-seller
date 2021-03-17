@@ -16,25 +16,25 @@ type ProductMongo struct {
 	Status         string
 }
 
-// ProductForCatalogMongo - model for mongo database
-type ProductForCatalogMongo struct {
+// ProductForListMongo - model for mongo database
+type ProductForListMongo struct {
 	ID           primitive.ObjectID `bson:"_id"`
-	Category     CategoryForCatalogMongo
-	Organization OrganizationForCatalogMongo
+	Category     CategoryForProductMongo
+	Organization OrganizationForProductMongo
 	Name         string
 	Price        int
 	Count        int
 	Status       string
 }
 
-// CategoryForCatalogMongo - model for mongo database
-type CategoryForCatalogMongo struct {
+// CategoryForProductMongo - model for mongo database
+type CategoryForProductMongo struct {
 	ID   primitive.ObjectID `bson:"_id"`
 	Name string
 }
 
-// OrganizationForCatalogMongo - model for mongo database
-type OrganizationForCatalogMongo struct {
+// OrganizationForProductMongo - model for mongo database
+type OrganizationForProductMongo struct {
 	ID    primitive.ObjectID `bson:"_id"`
 	Name  string
 	Phone string
@@ -79,26 +79,26 @@ func ToProductMongo(p *Product) *ProductMongo {
 	}
 }
 
-// ToCategoryForCatalog - convert model to entity
-func ToCategoryForCatalog(catForCatM *CategoryForCatalogMongo) *CategoryForCatalog {
-	return &CategoryForCatalog{
+// ToCategoryForProduct - convert model to entity
+func ToCategoryForProduct(catForCatM *CategoryForProductMongo) *CategoryForProduct {
+	return &CategoryForProduct{
 		ID:   catForCatM.ID.Hex(),
 		Name: catForCatM.Name,
 	}
 }
 
-// ToCategoryForCatalogMongo - convert model to entity
-func ToCategoryForCatalogMongo(catForCat *CategoryForCatalog) *CategoryForCatalogMongo {
+// ToCategoryForProductMongo - convert model to entity
+func ToCategoryForProductMongo(catForCat *CategoryForProduct) *CategoryForProductMongo {
 	ID, _ := primitive.ObjectIDFromHex(catForCat.ID)
-	return &CategoryForCatalogMongo{
+	return &CategoryForProductMongo{
 		ID:   ID,
 		Name: catForCat.Name,
 	}
 }
 
-// ToOrganizationForCatalog - convert model to entity
-func ToOrganizationForCatalog(orgForCatM *OrganizationForCatalogMongo) *OrganizationForCatalog {
-	return &OrganizationForCatalog{
+// ToOrganizationForProduct - convert model to entity
+func ToOrganizationForProduct(orgForCatM *OrganizationForProductMongo) *OrganizationForProduct {
+	return &OrganizationForProduct{
 		ID:    orgForCatM.ID.Hex(),
 		Name:  orgForCatM.Name,
 		Phone: orgForCatM.Phone,
@@ -106,10 +106,10 @@ func ToOrganizationForCatalog(orgForCatM *OrganizationForCatalogMongo) *Organiza
 	}
 }
 
-// ToOrganizationForCatalogMongo - convert model to entity
-func ToOrganizationForCatalogMongo(orgForCat *OrganizationForCatalog) *OrganizationForCatalogMongo {
+// ToOrganizationForProductMongo - convert model to entity
+func ToOrganizationForProductMongo(orgForCat *OrganizationForProduct) *OrganizationForProductMongo {
 	ID, _ := primitive.ObjectIDFromHex(orgForCat.ID)
-	return &OrganizationForCatalogMongo{
+	return &OrganizationForProductMongo{
 		ID:    ID,
 		Name:  orgForCat.Name,
 		Phone: orgForCat.Phone,
@@ -117,11 +117,11 @@ func ToOrganizationForCatalogMongo(orgForCat *OrganizationForCatalog) *Organizat
 	}
 }
 
-// ToProductForCatalog - convert model to entity
-func ToProductForCatalog(prodForCatM *ProductForCatalogMongo) *ProductForCatalog {
-	Category := ToCategoryForCatalog(&prodForCatM.Category)
-	Organization := ToOrganizationForCatalog(&prodForCatM.Organization)
-	return &ProductForCatalog{
+// ToProductForList - convert model to entity
+func ToProductForList(prodForCatM *ProductForListMongo) *ProductForList {
+	Category := ToCategoryForProduct(&prodForCatM.Category)
+	Organization := ToOrganizationForProduct(&prodForCatM.Organization)
+	return &ProductForList{
 		ID:           prodForCatM.ID.Hex(),
 		Name:         prodForCatM.Name,
 		Price:        prodForCatM.Price,
@@ -132,12 +132,12 @@ func ToProductForCatalog(prodForCatM *ProductForCatalogMongo) *ProductForCatalog
 	}
 }
 
-// ToProductForCatalogMongo - convert model to entity
-func ToProductForCatalogMongo(prodForCat *ProductForCatalog) *ProductForCatalogMongo {
+// ToProductForListMongo - convert model to entity
+func ToProductForListMongo(prodForCat *ProductForList) *ProductForListMongo {
 	ID, _ := primitive.ObjectIDFromHex(prodForCat.ID)
-	Category := ToCategoryForCatalogMongo(&prodForCat.Category)
-	Organization := ToOrganizationForCatalogMongo(&prodForCat.Organization)
-	return &ProductForCatalogMongo{
+	Category := ToCategoryForProductMongo(&prodForCat.Category)
+	Organization := ToOrganizationForProductMongo(&prodForCat.Organization)
+	return &ProductForListMongo{
 		ID:           ID,
 		Name:         prodForCat.Name,
 		Price:        prodForCat.Price,

@@ -1,4 +1,4 @@
-package catalogrepository
+package productrepository
 
 import (
 	"context"
@@ -9,13 +9,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// Repository - managing of catalog data
+// Repository - managing of product data
 type Repository struct {
 	db *mongo.Database
 }
 
-// NewCatalogRepository - constructor for catalog repository
-func NewCatalogRepository(db *mongo.Database) *Repository {
+// NewProductRepository - constructor for product repository
+func NewProductRepository(db *mongo.Database) *Repository {
 	return &Repository{
 		db: db,
 	}
@@ -46,7 +46,7 @@ var lookupPipeline = []bson.D{
 }
 
 // aggregateProducts - request for aggregation products info
-func aggregateProducts(db *mongo.Database, pipeline []bson.D) ([]*productentity.ProductForCatalog, error) {
+func aggregateProducts(db *mongo.Database, pipeline []bson.D) ([]*productentity.ProductForList, error) {
 	// request
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -57,15 +57,15 @@ func aggregateProducts(db *mongo.Database, pipeline []bson.D) ([]*productentity.
 	}
 
 	// format data from cursor
-	products := make([]*productentity.ProductForCatalog, 0)
+	products := make([]*productentity.ProductForList, 0)
 	defer cursor.Close(ctx)
 	for cursor.Next(ctx) {
-		prodMongo := new(productentity.ProductForCatalogMongo)
+		prodMongo := new(productentity.ProductForListMongo)
 		err := cursor.Decode(&prodMongo)
 		if err != nil {
 			return nil, err
 		}
-		prod := productentity.ToProductForCatalog(prodMongo)
+		prod := productentity.ToProductForList(prodMongo)
 		products = append(products, prod)
 	}
 	if err := cursor.Err(); err != nil {

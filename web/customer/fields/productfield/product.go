@@ -1,14 +1,13 @@
-package catalogfield
+package productfield
 
 import "github.com/graphql-go/graphql"
 
-// graphql.NewList(catalogfield.ProductForCatalog),
-var Catalog = graphql.NewObject(
+var ProductList = graphql.NewObject(
 	graphql.ObjectConfig{
-		Name: "Catalog",
+		Name: "ProductList",
 		Fields: graphql.Fields{
 			"products": &graphql.Field{
-				Type: graphql.NewList(ProductForCatalog),
+				Type: graphql.NewList(ProductForList),
 			},
 			"count": &graphql.Field{
 				Type: graphql.Int,
@@ -17,9 +16,9 @@ var Catalog = graphql.NewObject(
 	},
 )
 
-var ProductForCatalog = graphql.NewObject(
+var ProductForList = graphql.NewObject(
 	graphql.ObjectConfig{
-		Name: "ProductForCatalog",
+		Name: "ProductForList",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
 				Type: graphql.String,
@@ -37,18 +36,18 @@ var ProductForCatalog = graphql.NewObject(
 				Type: graphql.Int,
 			},
 			"Category": &graphql.Field{
-				Type: CategoryForCatalog,
+				Type: CategoryForProduct,
 			},
 			"Organization": &graphql.Field{
-				Type: OrganizationForCatalog,
+				Type: OrganizationForProduct,
 			},
 		},
 	},
 )
 
-var CategoryForCatalog = graphql.NewObject(
+var CategoryForProduct = graphql.NewObject(
 	graphql.ObjectConfig{
-		Name: "CategoryForCatalog",
+		Name: "CategoryForProduct",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
 				Type: graphql.String,
@@ -60,9 +59,9 @@ var CategoryForCatalog = graphql.NewObject(
 	},
 )
 
-var OrganizationForCatalog = graphql.NewObject(
+var OrganizationForProduct = graphql.NewObject(
 	graphql.ObjectConfig{
-		Name: "OrganizationForCatalog",
+		Name: "OrganizationForProduct",
 		Fields: graphql.Fields{
 			"id": &graphql.Field{
 				Type: graphql.String,

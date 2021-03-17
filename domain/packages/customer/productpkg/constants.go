@@ -1,4 +1,4 @@
-package catalog
+package productpkg
 
 var (
 	// StatusActive - status for active product

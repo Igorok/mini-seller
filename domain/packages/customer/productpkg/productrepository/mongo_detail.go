@@ -1,4 +1,4 @@
-package catalogrepository
+package productrepository
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 )
 
 // GetProductDetail - get details for product from mongodb
-func (cRepo Repository) GetProductDetail(ctx context.Context, id string) (*productentity.ProductForCatalog, error) {
+func (cRepo Repository) GetProductDetail(ctx context.Context, id string) (*productentity.ProductForList, error) {
 	ID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err

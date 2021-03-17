@@ -1,10 +1,10 @@
-package catalogrepository
+package productrepository
 
 import (
 	"context"
 	"log"
 	"mini-seller/domain/common/entities/productentity"
-	"mini-seller/domain/packages/customer/catalog"
+	"mini-seller/domain/packages/customer/productpkg"
 	"sync"
 	"time"
 
@@ -12,11 +12,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func catalogList(db *mongo.Database, skip, limit int) ([]*productentity.ProductForCatalog, error) {
+func getProductList(db *mongo.Database, skip, limit int) ([]*productentity.ProductForList, error) {
 	// build query
 	pipeline := []bson.D{
 		{{"$match", bson.M{
-			"status": catalog.StatusActive,
+			"status": productpkg.StatusActive,
 		}}},
 		sortPipeline,
 		{{"$skip", skip}},
@@ -28,18 +28,18 @@ func catalogList(db *mongo.Database, skip, limit int) ([]*productentity.ProductF
 	return aggregateProducts(db, pipeline)
 }
 
-func catalogCount(db *mongo.Database) (int64, error) {
+func getProductCount(db *mongo.Database) (int64, error) {
 	// request
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	countQ := bson.M{"status": catalog.StatusActive}
+	countQ := bson.M{"status": productpkg.StatusActive}
 	return db.Collection("products").CountDocuments(ctx, countQ)
 }
 
-// GetCatalog - get list of products from mongodb
-func (cRepo Repository) GetCatalog(ctx context.Context, skip, limit int) ([]*productentity.ProductForCatalog, int64, error) {
-	var productList []*productentity.ProductForCatalog
+// GetProductList - get list of products from mongodb
+func (cRepo Repository) GetProductList(ctx context.Context, skip, limit int) ([]*productentity.ProductForList, int64, error) {
+	var productList []*productentity.ProductForList
 	var count int64
 	var errlist, errcount error
 	var wg sync.WaitGroup
@@ -48,14 +48,14 @@ func (cRepo Repository) GetCatalog(ctx context.Context, skip, limit int) ([]*pro
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		productList, errlist = catalogList(cRepo.db, skip, limit)
+		productList, errlist = getProductList(cRepo.db, skip, limit)
 	}()
 
 	// get count
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		count, errcount = catalogCount(cRepo.db)
+		count, errcount = getProductCount(cRepo.db)
 	}()
 
 	// wait goroutines

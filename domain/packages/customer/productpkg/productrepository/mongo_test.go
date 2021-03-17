@@ -1,4 +1,4 @@
-package catalogrepository
+package productrepository
 
 import (
 	"context"
@@ -28,7 +28,7 @@ func setUp() {
 	vip := viperhelper.Viper{ConfigType: "", ConfigName: "test", ConfigPath: "infrastructure/viperhelper"}
 	err := vip.Read()
 	if err != nil {
-		log.Fatal("Catalog", err)
+		log.Fatal("Product", err)
 	}
 
 	db, err = mongohelper.Connect()
@@ -44,34 +44,34 @@ func tearDown() {
 	db.Drop(context.TODO())
 }
 
-func TestGetCatalog(t *testing.T) {
+func TestGetProductList(t *testing.T) {
 	t.Log("Test product repository list")
 
-	catalogRepo := NewCatalogRepository(db)
+	productRepo := NewProductRepository(db)
 
 	// test skip limit working
-	catalogProd, count, err := catalogRepo.GetCatalog(context.TODO(), 0, 2)
+	prodList, count, err := productRepo.GetProductList(context.TODO(), 0, 2)
 	assert.Nil(t, err)
 	assert.Equal(t, count, int64(8))
-	assert.Equal(t, len(catalogProd), 2)
-	assert.Equal(t, catalogProd[0].Name, "Steak New York")
-	assert.Equal(t, catalogProd[0].Category.Name, "Steak")
-	assert.Equal(t, catalogProd[0].Organization.Name, "restaurant")
+	assert.Equal(t, len(prodList), 2)
+	assert.Equal(t, prodList[0].Name, "Steak New York")
+	assert.Equal(t, prodList[0].Category.Name, "Steak")
+	assert.Equal(t, prodList[0].Organization.Name, "restaurant")
 
-	catalogProd, count, err = catalogRepo.GetCatalog(context.TODO(), 6, 2)
+	prodList, count, err = productRepo.GetProductList(context.TODO(), 6, 2)
 	assert.Nil(t, err)
 	assert.Equal(t, count, int64(8))
-	assert.Equal(t, len(catalogProd), 2)
-	assert.Equal(t, catalogProd[0].Name, "Four Cheese")
-	assert.Equal(t, catalogProd[0].Category.Name, "Pizza")
-	assert.Equal(t, catalogProd[0].Organization.Name, "pizza")
+	assert.Equal(t, len(prodList), 2)
+	assert.Equal(t, prodList[0].Name, "Four Cheese")
+	assert.Equal(t, prodList[0].Category.Name, "Pizza")
+	assert.Equal(t, prodList[0].Organization.Name, "pizza")
 }
 
 func TestGetProductDetail(t *testing.T) {
 	t.Log("Test product repository detail")
 
-	catalogRepo := NewCatalogRepository(db)
-	product, err := catalogRepo.GetProductDetail(context.TODO(), "604497558ffcad558eb8e1f6")
+	productRepo := NewProductRepository(db)
+	product, err := productRepo.GetProductDetail(context.TODO(), "604497558ffcad558eb8e1f6")
 
 	assert.Nil(t, err)
 	assert.Equal(t, product.Name, "Cola")

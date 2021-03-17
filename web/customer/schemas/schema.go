@@ -1,21 +1,21 @@
 package schemas
 
 import (
-	"mini-seller/domain/packages/customer/catalog"
-	"mini-seller/web/customer/controllers/catalogcontroller"
+	"mini-seller/domain/packages/customer/productpkg"
+	"mini-seller/web/customer/controllers/productcontroller"
 
 	"github.com/graphql-go/graphql"
 )
 
 // GetSchema - return graphql schema
 func GetSchema(
-	catalogUseCase catalog.IUseCase,
+	productUseCase productpkg.IUseCase,
 ) (graphql.Schema, error) {
 	// initialization of controllers
-	catalogController := catalogcontroller.NewCatalogController(catalogUseCase)
+	productController := productcontroller.NewProductController(productUseCase)
 
 	fields := graphql.Fields{
-		"getCatalog": catalogController.GetCatalog(),
+		"getProductList": productController.GetProductList(),
 	}
 	rootQuery := graphql.ObjectConfig{
 		Name:   "RootQuery",
