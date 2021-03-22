@@ -25,7 +25,7 @@ func TestMain(m *testing.M) {
 
 func setUp() {
 	os.Chdir("../../../../../")
-	vip := viperhelper.Viper{ConfigType: "", ConfigName: "test", ConfigPath: "infrastructure/viperhelper"}
+	vip := viperhelper.Viper{ConfigType: "", ConfigName: "test.json", ConfigPath: "infrastructure/viperhelper"}
 	err := vip.Read()
 	if err != nil {
 		log.Fatal("Product", err)

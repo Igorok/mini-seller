@@ -18,7 +18,7 @@ type IViper interface {
 // default values for json config
 const (
 	configType = "json"
-	configName = "config"
+	configName = "config.json"
 	configPath = "./infrastructure/viperhelper"
 )
 

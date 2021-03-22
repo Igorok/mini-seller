@@ -15,7 +15,8 @@ func GetSchema(
 	productController := productcontroller.NewProductController(productUseCase)
 
 	fields := graphql.Fields{
-		"getProductList": productController.GetProductList(),
+		"getProductList":   productController.GetProductList(),
+		"getProductDetail": productController.GetProductDetail(),
 	}
 	rootQuery := graphql.ObjectConfig{
 		Name:   "RootQuery",

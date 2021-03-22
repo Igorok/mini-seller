@@ -46,27 +46,29 @@ go get -u github.com/gin-gonic/gin
 ```
 
 ### GraphQL
-GraphQL is kind of webapi, it provide a query language, understandable description of the data in your API and has very powerful playground.
+GraphQL is kind of web api, it provide a query language, understandable documentation for your requests and has pretty good playground.
 ```
 go get github.com/graphql-go/graphql
 ```
 
+With GraphQL you could select fields that you need from backend.
+
 Query
 ```
-query getCatalog($skip: Int, $limit: Int) {
-  getCatalog(skip: $skip, limit: $limit) {
+query getProductList($skip: Int, $limit: Int) {
+  getProductList(skip: $skip, limit: $limit) {
     products {
       id
       name
       price
       count
-      Organization {
-        id
-        name
-      }
       Category {
         id
         name
+      }
+      Organization {
+        id
+        email
       }
     }
     count
@@ -82,7 +84,40 @@ Variables
 }
 ```
 
+You could use Aliases and get different data in one request. You could use Fragment for common fields.
 
+Query
+```
+query getProductDetail($id_cola: String, $id_salad: String) {
+    cola: getProductDetail(id: $id_cola) {
+        ...detailFields
+    },
+    salad: getProductDetail(id: $id_salad) {
+        ...detailFields
+    }
+}
 
+fragment detailFields on ProductForList {
+    id
+    name
+    price
+    count
+    Category {
+        id
+        name
+    }
+    Organization {
+        id
+        email
+    }
+} }
+}
+```
 
-
+Variables
+```
+{
+    "id_cola": "604497558ffcad558eb8e1f5",
+    "id_salad": "604497558ffcad558eb8e1f4"
+}
+```
