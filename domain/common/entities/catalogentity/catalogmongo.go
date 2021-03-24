@@ -12,41 +12,26 @@ type ProductInfoMongo struct {
 	Price          int
 	Count          int
 	Status         string
-	Category       CategoryInfoMongo
-	Organization   OrganizationInfoMongo
 }
 
 // CategoryInfoMongo - model for category of products
 type CategoryInfoMongo struct {
-	ID       primitive.ObjectID `bson:"_id,omitempty"`
-	Name     string
-	Status   string
-	Products []ProductInfoMongo
+	ID     primitive.ObjectID `bson:"_id,omitempty"`
+	Name   string
+	Status string
 }
 
 // OrganizationInfoMongo - model for organization
 type OrganizationInfoMongo struct {
-	ID         primitive.ObjectID `bson:"_id,omitempty"`
-	Name       string
-	Email      string
-	Phone      string
-	Status     string
-	Products   []ProductInfoMongo
-	Categories []CategoryInfoMongo
+	ID     primitive.ObjectID `bson:"_id,omitempty"`
+	Name   string
+	Email  string
+	Phone  string
+	Status string
 }
 
 // ToProductInfo - convert model to entity
 func ToProductInfo(pim ProductInfoMongo) ProductInfo {
-	var category CategoryInfo
-	if !pim.Category.ID.IsZero() {
-		category = ToCategoryInfo(pim.Category)
-	}
-
-	var organization OrganizationInfo
-	if !pim.Organization.ID.IsZero() {
-		organization = ToOrganizationInfo(pim.Organization)
-	}
-
 	return ProductInfo{
 		ID:             pim.ID.Hex(),
 		IDCategory:     pim.ID.Hex(),
@@ -55,8 +40,6 @@ func ToProductInfo(pim ProductInfoMongo) ProductInfo {
 		Price:          pim.Price,
 		Count:          pim.Count,
 		Status:         pim.Status,
-		Category:       category,
-		Organization:   organization,
 	}
 }
 
@@ -66,16 +49,6 @@ func ToProductInfoMongo(pi ProductInfo) ProductInfoMongo {
 	idCategory, _ := primitive.ObjectIDFromHex(pi.IDCategory)
 	idOrganization, _ := primitive.ObjectIDFromHex(pi.IDOrganization)
 
-	var category CategoryInfoMongo
-	if pi.Category.ID != "" {
-		category = ToCategoryInfoMongo(pi.Category)
-	}
-
-	var organization OrganizationInfoMongo
-	if pi.Organization.ID != "" {
-		organization = ToOrganizationInfoMongo(pi.Organization)
-	}
-
 	return ProductInfoMongo{
 		ID:             id,
 		IDCategory:     idCategory,
@@ -84,8 +57,6 @@ func ToProductInfoMongo(pi ProductInfo) ProductInfoMongo {
 		Price:          pi.Price,
 		Count:          pi.Count,
 		Status:         pi.Status,
-		Category:       category,
-		Organization:   organization,
 	}
 }
 

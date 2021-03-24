@@ -26,7 +26,7 @@ func main() {
 
 	fmt.Println("WEB_PORT", viper.GetString("WEB_PORT"))
 
-	db, err := mongohelper.Connect()
+	db, err := mongohelper.Connect("")
 	if err != nil {
 		log.Fatal(err)
 	}

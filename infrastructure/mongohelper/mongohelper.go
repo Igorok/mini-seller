@@ -12,9 +12,11 @@ import (
 )
 
 // Connect connection to mongodb
-func Connect() (*mongo.Database, error) {
+func Connect(dbname string) (*mongo.Database, error) {
 	fmt.Println("init mongodb")
-	dbname := viper.GetString("MONGO_DB")
+	if dbname == "" {
+		dbname = viper.GetString("MONGO_DB")
+	}
 
 	// connection string
 	uri := "mongodb://"

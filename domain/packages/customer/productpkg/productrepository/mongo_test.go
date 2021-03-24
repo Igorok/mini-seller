@@ -31,7 +31,7 @@ func setUp() {
 		log.Fatal("Product", err)
 	}
 
-	db, err = mongohelper.Connect()
+	db, err = mongohelper.Connect("test_product")
 	if err != nil {
 		log.Fatal(err)
 	}

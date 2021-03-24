@@ -8,22 +8,25 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // GetOrganizationList - list with active organizations
-func (cRepo Repository) GetOrganizationList() ([]catalogentity.OrganizationInfo, error) {
+func (cRepo Repository) GetOrganizationList(contx context.Context) ([]*catalogentity.OrganizationInfo, error) {
 	// get context
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	// request
-	cursor, err := cRepo.db.Collection("organizations").Find(ctx, bson.M{"status": catalogpkg.StatusActive})
+	findOptions := options.Find()
+	findOptions.SetSort(bson.D{{"_id", 1}})
+	cursor, err := cRepo.db.Collection("organizations").Find(ctx, bson.M{"status": catalogpkg.StatusActive}, findOptions)
 	if err != nil {
 		return nil, err
 	}
 
 	// format data from cursor
-	organizations := make([]catalogentity.OrganizationInfo, 0)
+	organizations := make([]*catalogentity.OrganizationInfo, 0)
 	defer cursor.Close(ctx)
 
 	for cursor.Next(ctx) {
@@ -33,7 +36,7 @@ func (cRepo Repository) GetOrganizationList() ([]catalogentity.OrganizationInfo,
 			return nil, err
 		}
 		org := catalogentity.ToOrganizationInfo(orgMongo)
-		organizations = append(organizations, org)
+		organizations = append(organizations, &org)
 	}
 
 	// answer
@@ -45,11 +48,11 @@ GetOrganizationDetail - get detail info about organization
 @param {String} id - id of organization
 @return catalogentity.OrganizationInfo, error - detail info and error
 */
-func (cRepo Repository) GetOrganizationDetail(id string) (catalogentity.OrganizationInfo, error) {
+func (cRepo Repository) GetOrganizationDetail(contx context.Context, id string) (*catalogentity.OrganizationInfo, error) {
 	// convert id to bson
 	ID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return catalogentity.OrganizationInfo{}, err
+		return nil, err
 	}
 
 	// get context
@@ -60,12 +63,12 @@ func (cRepo Repository) GetOrganizationDetail(id string) (catalogentity.Organiza
 	orgMongo := catalogentity.OrganizationInfoMongo{}
 	err = cRepo.db.Collection("organizations").FindOne(ctx, bson.M{"_id": ID, "status": catalogpkg.StatusActive}).Decode(&orgMongo)
 	if err != nil {
-		return catalogentity.OrganizationInfo{}, err
+		return nil, err
 	}
 
 	// convert to entity
 	organization := catalogentity.ToOrganizationInfo(orgMongo)
 
 	// answer
-	return organization, nil
+	return &organization, nil
 }

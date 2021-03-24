@@ -10,25 +10,20 @@ type ProductInfo struct {
 	Price          int
 	Count          int
 	Status         string
-	Category       CategoryInfo
-	Organization   OrganizationInfo
 }
 
 // CategoryInfo - entity for category of products
 type CategoryInfo struct {
-	ID       string
-	Name     string
-	Status   string
-	Products []ProductInfo
+	ID     string
+	Name   string
+	Status string
 }
 
 // OrganizationInfo - entity for organization
 type OrganizationInfo struct {
-	ID         string
-	Name       string
-	Email      string
-	Phone      string
-	Status     string
-	Products   []ProductInfo
-	Categories CategoryInfo
+	ID     string
+	Name   string
+	Email  string
+	Phone  string
+	Status string
 }

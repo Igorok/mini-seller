@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"log"
+	"mini-seller/domain/packages/customer/catalogpkg/catalogrepository"
+	"mini-seller/domain/packages/customer/catalogpkg/catalogusecase"
 	"mini-seller/domain/packages/customer/productpkg/productrepository"
 	"mini-seller/domain/packages/customer/productpkg/productusecase"
 	"mini-seller/web/customer/schemas"
@@ -17,8 +19,11 @@ func GetHandler(db *mongo.Database) gin.HandlerFunc {
 	productRepository := productrepository.NewProductRepository(db)
 	productUseCase := productusecase.NewUseCase(productRepository)
 
+	catalogRepository := catalogrepository.NewCatalogRepository(db)
+	catalogUseCase := catalogusecase.NewCatalogUseCase(catalogRepository)
+
 	// initialization of web schema Graphql
-	gqlSchema, err := schemas.GetSchema(productUseCase)
+	gqlSchema, err := schemas.GetSchema(productUseCase, catalogUseCase)
 	if err != nil {
 		log.Fatal("GetSchema:", err)
 	}

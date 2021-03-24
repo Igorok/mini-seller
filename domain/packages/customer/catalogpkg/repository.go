@@ -1,14 +1,17 @@
 package catalogpkg
 
-import "mini-seller/domain/common/entities/catalogentity"
+import (
+	"context"
+	"mini-seller/domain/common/entities/catalogentity"
+)
 
 type IRepository interface {
-	GetOrganizationList() ([]*catalogentity.OrganizationInfo, error)
-	GetOrganizationInfo(id string) (catalogentity.OrganizationInfo, error)
+	GetOrganizationList(ctx context.Context) ([]*catalogentity.OrganizationInfo, error)
+	GetOrganizationDetail(ctx context.Context, id string) (*catalogentity.OrganizationInfo, error)
 
-	GetCategoryList() ([]*catalogentity.CategoryInfo, error)
-	GetCategoryDetail(id string) (catalogentity.CategoryInfo, error)
+	GetCategoryList(ctx context.Context) ([]*catalogentity.CategoryInfo, error)
+	GetCategoryDetail(ctx context.Context, id string) (*catalogentity.CategoryInfo, error)
 
-	GetProductList(id_organization string, id_category string) ([]*catalogentity.ProductInfo, error)
-	GetProductDetail(id string) (catalogentity.ProductInfo, error)
+	GetProductList(ctx context.Context, id_organization string, id_category string) ([]*catalogentity.ProductInfo, error)
+	GetProductDetail(ctx context.Context, id string) (*catalogentity.ProductInfo, error)
 }
