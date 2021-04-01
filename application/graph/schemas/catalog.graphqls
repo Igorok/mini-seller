@@ -1,0 +1,27 @@
+# entities
+type Organization {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  status: String!
+  categories: [Category]
+  products: [Product]
+}
+
+type Category {
+  id: String!
+  name: String!
+  status: String!
+  products: [Product]
+}
+
+type Product {
+  id: String!
+  name: String!
+  status: String!
+  price: Int!
+  count: Int!
+  category: Category
+  organization: Organization
+}

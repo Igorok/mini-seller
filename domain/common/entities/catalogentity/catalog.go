@@ -21,9 +21,10 @@ type CategoryInfo struct {
 
 // OrganizationInfo - entity for organization
 type OrganizationInfo struct {
-	ID     string
-	Name   string
-	Email  string
-	Phone  string
-	Status string
+	ID          string
+	Name        string
+	Email       string
+	Phone       string
+	Status      string
+	IDsCategory []string
 }

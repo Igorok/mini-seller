@@ -121,3 +121,28 @@ Variables
     "id_salad": "604497558ffcad558eb8e1f4"
 }
 ```
+
+##Gqlgen
+Setup
+```
+go get github.com/99designs/gqlgen
+```
+
+Initialize web application
+```
+go run github.com/99designs/gqlgen init
+```
+
+Generate code for new model
+```
+go run github.com/99designs/gqlgen generate
+```
+
+At the top of our resolver.go, between package and import, add the following line:
+```
+//go:generate go run github.com/99designs/gqlgen
+```
+To run go generate recursively over your entire project, use this command:
+```
+go generate ./...
+```
