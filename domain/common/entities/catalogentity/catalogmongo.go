@@ -23,19 +23,20 @@ type CategoryInfoMongo struct {
 
 // OrganizationInfoMongo - model for organization
 type OrganizationInfoMongo struct {
-	ID     primitive.ObjectID `bson:"_id,omitempty"`
-	Name   string
-	Email  string
-	Phone  string
-	Status string
+	ID          primitive.ObjectID `bson:"_id,omitempty"`
+	Name        string
+	Email       string
+	Phone       string
+	Status      string
+	IDsCategory []primitive.ObjectID `bson:"_ids_cat,omitempty"`
 }
 
 // ToProductInfo - convert model to entity
 func ToProductInfo(pim ProductInfoMongo) ProductInfo {
 	return ProductInfo{
 		ID:             pim.ID.Hex(),
-		IDCategory:     pim.ID.Hex(),
-		IDOrganization: pim.ID.Hex(),
+		IDCategory:     pim.IDCategory.Hex(),
+		IDOrganization: pim.IDOrganization.Hex(),
 		Name:           pim.Name,
 		Price:          pim.Price,
 		Count:          pim.Count,
@@ -82,12 +83,19 @@ func ToCategoryInfoMongo(ci CategoryInfo) CategoryInfoMongo {
 
 // ToOrganizationInfo - convert model to entity
 func ToOrganizationInfo(oim OrganizationInfoMongo) OrganizationInfo {
+	IDsCategory := make([]string, 0)
+	if oim.IDsCategory != nil && len(oim.IDsCategory) > 0 {
+		for _, id := range oim.IDsCategory {
+			IDsCategory = append(IDsCategory, id.Hex())
+		}
+	}
 	return OrganizationInfo{
-		ID:     oim.ID.Hex(),
-		Name:   oim.Name,
-		Email:  oim.Email,
-		Phone:  oim.Phone,
-		Status: oim.Status,
+		ID:          oim.ID.Hex(),
+		Name:        oim.Name,
+		Email:       oim.Email,
+		Phone:       oim.Phone,
+		Status:      oim.Status,
+		IDsCategory: IDsCategory,
 	}
 }
 
@@ -95,11 +103,22 @@ func ToOrganizationInfo(oim OrganizationInfoMongo) OrganizationInfo {
 func ToOrganizationInfoMongo(oi OrganizationInfo) OrganizationInfoMongo {
 	id, _ := primitive.ObjectIDFromHex(oi.ID)
 
+	IDsCategory := make([]primitive.ObjectID, 0)
+	if oi.IDsCategory != nil && len(oi.IDsCategory) > 0 {
+		for _, idCat := range oi.IDsCategory {
+			if idCat != "" {
+				idMongo, _ := primitive.ObjectIDFromHex(idCat)
+				IDsCategory = append(IDsCategory, idMongo)
+			}
+		}
+	}
+
 	return OrganizationInfoMongo{
-		ID:     id,
-		Name:   oi.Name,
-		Email:  oi.Email,
-		Phone:  oi.Phone,
-		Status: oi.Status,
+		ID:          id,
+		Name:        oi.Name,
+		Email:       oi.Email,
+		Phone:       oi.Phone,
+		Status:      oi.Status,
+		IDsCategory: IDsCategory,
 	}
 }

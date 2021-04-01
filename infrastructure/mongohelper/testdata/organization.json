@@ -5,14 +5,16 @@
             "Name": "pizza",
             "Email": "pizza@test.tst",
             "Phone": "12345678",
-            "Status": "active"
+            "Status": "active",
+            "IDsCategory": [ "604488100f719d9c76a28fe3", "604488100f719d9c76a28fe7" ]
         },
         {
             "ID": "6043d76e94df8de741c2c0d6",
             "Name": "restaurant",
             "Email": "restaurant@test.tst",
             "Phone": "87654321",
-            "Status": "active"
+            "Status": "active",
+            "IDsCategory": [ "604488100f719d9c76a28fe3", "604488100f719d9c76a28fe4", "604488100f719d9c76a28fe5", "604488100f719d9c76a28fe6" ]
         }
     ]
 }
