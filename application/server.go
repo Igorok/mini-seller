@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"mini-seller/application/graph"
 	"mini-seller/application/graph/generated"
+	"mini-seller/application/graph/resolvers"
 	"mini-seller/domain/packages/catalogpkg/catalogrepository"
 	"mini-seller/domain/packages/catalogpkg/catalogusecase"
 	"mini-seller/infrastructure/mongohelper"
@@ -22,8 +21,6 @@ func main() {
 	vip := viperhelper.Viper{ConfigType: "", ConfigName: "", ConfigPath: "infrastructure/viperhelper"}
 	vip.Read()
 
-	fmt.Println("WEB_PORT", viper.GetString("WEB_PORT"))
-
 	db, err := mongohelper.Connect("")
 	if err != nil {
 		log.Fatal(err)
@@ -32,19 +29,13 @@ func main() {
 	catalogRepository := catalogrepository.NewCatalogRepository(db)
 	catalogUseCase := catalogusecase.NewCatalogUseCase(catalogRepository)
 
-	// port := os.Getenv("PORT")
-	// if port == "" {
-	// 	port = defaultPort
-	// }
+	resolver := resolvers.Resolver{CatalogUseCase: catalogUseCase}
+
+	router := http.NewServeMux()
+	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	router.Handle("/query", handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver})))
 
 	port := viper.GetString("WEB_PORT")
-
-	resolver := graph.Resolver{CatalogUseCase: catalogUseCase}
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver}))
-
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
-
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	log.Fatal(http.ListenAndServe(":"+port, resolvers.LoaderMiddleware(catalogUseCase, router)))
 }

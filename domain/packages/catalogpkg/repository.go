@@ -12,6 +12,6 @@ type IRepository interface {
 	GetCategoryList(ctx context.Context) ([]*catalogentity.CategoryInfo, error)
 	GetCategoryDetail(ctx context.Context, id string) (*catalogentity.CategoryInfo, error)
 
-	GetProductList(ctx context.Context, id_organization string, id_category string) ([]*catalogentity.ProductInfo, error)
+	GetProductList(ctx context.Context, ids_organization []string, ids_category []string) ([]*catalogentity.ProductInfo, error)
 	GetProductDetail(ctx context.Context, id string) (*catalogentity.ProductInfo, error)
 }

@@ -28,8 +28,8 @@ func (cUseCase UseCase) GetCategoryDetail(ctx context.Context, id string) (*cata
 	return cUseCase.catalogRepo.GetCategoryDetail(ctx, id)
 }
 
-func (cUseCase UseCase) GetProductList(ctx context.Context, id_organization string, id_category string) ([]*catalogentity.ProductInfo, error) {
-	return cUseCase.catalogRepo.GetProductList(ctx, id_organization, id_category)
+func (cUseCase UseCase) GetProductList(ctx context.Context, ids_organization []string, ids_category []string) ([]*catalogentity.ProductInfo, error) {
+	return cUseCase.catalogRepo.GetProductList(ctx, ids_organization, ids_category)
 }
 func (cUseCase UseCase) GetProductDetail(ctx context.Context, id string) (*catalogentity.ProductInfo, error) {
 	return cUseCase.catalogRepo.GetProductDetail(ctx, id)

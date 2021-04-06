@@ -1,4 +1,4 @@
-package graph
+package resolvers
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
@@ -17,7 +17,7 @@ func (r *categoryResolver) Products(ctx context.Context, obj *model.Category) ([
 		IDOrg = obj.IDOrg
 	}
 
-	prodList, err := r.CatalogUseCase.GetProductList(ctx, IDOrg, obj.ID)
+	prodList, err := r.CatalogUseCase.GetProductList(ctx, []string{IDOrg}, []string{obj.ID})
 	if err != nil {
 		log.Warn(err)
 		return nil, err
@@ -66,29 +66,7 @@ func (r *organizationResolver) Categories(ctx context.Context, obj *model.Organi
 }
 
 func (r *organizationResolver) Products(ctx context.Context, obj *model.Organization) ([]*model.Product, error) {
-	prodList, err := r.CatalogUseCase.GetProductList(ctx, obj.ID, "")
-	if err != nil {
-		log.Warn(err)
-		return nil, err
-	}
-	if prodList == nil {
-		return nil, nil
-	}
-
-	products := make([]*model.Product, len(prodList))
-	for i, product := range prodList {
-		products[i] = &model.Product{
-			ID:             product.ID,
-			IDCategory:     product.IDCategory,
-			IDOrganization: product.IDOrganization,
-			Name:           product.Name,
-			Price:          product.Price,
-			Count:          product.Count,
-			Status:         product.Status,
-		}
-	}
-
-	return products, nil
+	return ctxLoaders(ctx).productsByOrganization.Load(obj.ID)
 }
 
 func (r *productResolver) Category(ctx context.Context, obj *model.Product) (*model.Category, error) {

@@ -11,26 +11,35 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (cRepo Repository) GetProductList(contx context.Context, id_organization string, id_category string) ([]*catalogentity.ProductInfo, error) {
+func (cRepo Repository) GetProductList(contx context.Context, ids_organization []string, ids_category []string) ([]*catalogentity.ProductInfo, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	// query
 	query := bson.M{"status": catalogpkg.StatusActive}
 
-	if id_organization != "" {
-		IDOrganization, err := primitive.ObjectIDFromHex(id_organization)
-		if err != nil {
-			return nil, err
+	if ids_organization != nil && len(ids_organization) > 0 {
+		ids_org := make([]primitive.ObjectID, len(ids_organization))
+		for i, id := range ids_organization {
+			id_org, err_id := primitive.ObjectIDFromHex(id)
+			if err_id != nil {
+				return nil, err_id
+			}
+			ids_org[i] = id_org
 		}
-		query["_id_org"] = IDOrganization
+		query["_id_org"] = bson.M{"$in": ids_org}
 	}
-	if id_category != "" {
-		IDCategory, err := primitive.ObjectIDFromHex(id_category)
-		if err != nil {
-			return nil, err
+
+	if ids_category != nil && len(ids_category) > 0 {
+		ids_cat := make([]primitive.ObjectID, len(ids_category))
+		for i, id := range ids_category {
+			id_cat, err_id := primitive.ObjectIDFromHex(id)
+			if err_id != nil {
+				return nil, err_id
+			}
+			ids_cat[i] = id_cat
 		}
-		query["_id_cat"] = IDCategory
+		query["_id_cat"] = bson.M{"$in": ids_cat}
 	}
 
 	// sort

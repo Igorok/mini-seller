@@ -90,17 +90,17 @@ func TestGetProductList(t *testing.T) {
 
 	catalogRepo := NewCatalogRepository(db)
 
-	prodList, err := catalogRepo.GetProductList(context.TODO(), "", "604488100f719d9c76a28fe3")
+	prodList, err := catalogRepo.GetProductList(context.TODO(), nil, []string{"604488100f719d9c76a28fe3"})
 	assert.Nil(t, err)
 	assert.Equal(t, len(prodList), 2)
 	assert.Equal(t, prodList[0].Name, "Cola")
 
-	prodList, err = catalogRepo.GetProductList(context.TODO(), "6043d76e94df8de741c2c0d5", "")
+	prodList, err = catalogRepo.GetProductList(context.TODO(), []string{"6043d76e94df8de741c2c0d5"}, nil)
 	assert.Nil(t, err)
 	assert.Equal(t, len(prodList), 4)
 	assert.Equal(t, prodList[0].Name, "Cola")
 
-	prodList, err = catalogRepo.GetProductList(context.TODO(), "6043d76e94df8de741c2c0d5", "604488100f719d9c76a28fe7")
+	prodList, err = catalogRepo.GetProductList(context.TODO(), []string{"6043d76e94df8de741c2c0d5"}, []string{"604488100f719d9c76a28fe7"})
 	assert.Nil(t, err)
 	assert.Equal(t, len(prodList), 3)
 	assert.Equal(t, prodList[0].Name, "Chicken Barbecue")
