@@ -2,7 +2,7 @@ package catalogrepository
 
 import (
 	"context"
-	"mini-seller/domain/common/entities/catalogentity"
+	"mini-seller/domain/common/entities/productcategoryentity"
 	"mini-seller/domain/packages/catalogpkg"
 	"time"
 
@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (cRepo Repository) GetCategoryList(contx context.Context, ids []string) ([]*catalogentity.CategoryInfo, error) {
+func (cRepo Repository) GetCategoryList(contx context.Context, ids []string) ([]*productcategoryentity.ProductCategory, error) {
 	// get context
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -40,24 +40,24 @@ func (cRepo Repository) GetCategoryList(contx context.Context, ids []string) ([]
 	}
 
 	// format data from cursor
-	categories := make([]*catalogentity.CategoryInfo, 0)
+	categories := make([]*productcategoryentity.ProductCategory, 0)
 	defer cursor.Close(ctx)
 
 	for cursor.Next(ctx) {
-		catMongo := catalogentity.CategoryInfoMongo{}
+		catMongo := productcategoryentity.ProductCategoryMongo{}
 		err := cursor.Decode(&catMongo)
 		if err != nil {
 			return nil, err
 		}
-		category := catalogentity.ToCategoryInfo(catMongo)
-		categories = append(categories, &category)
+		category := productcategoryentity.ToEntity(&catMongo)
+		categories = append(categories, category)
 	}
 
 	// answer
 	return categories, nil
 }
 
-func (cRepo Repository) GetCategoryDetail(contx context.Context, id string) (*catalogentity.CategoryInfo, error) {
+func (cRepo Repository) GetCategoryDetail(contx context.Context, id string) (*productcategoryentity.ProductCategory, error) {
 	// convert id to bson
 	ID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -69,15 +69,15 @@ func (cRepo Repository) GetCategoryDetail(contx context.Context, id string) (*ca
 	defer cancel()
 
 	// context
-	catMongo := catalogentity.CategoryInfoMongo{}
+	catMongo := productcategoryentity.ProductCategoryMongo{}
 	err = cRepo.db.Collection("product_categories").FindOne(ctx, bson.M{"_id": ID, "status": catalogpkg.StatusActive}).Decode(&catMongo)
 	if err != nil {
 		return nil, err
 	}
 
 	// convert to entity
-	category := catalogentity.ToCategoryInfo(catMongo)
+	category := productcategoryentity.ToEntity(&catMongo)
 
 	// answer
-	return &category, nil
+	return category, nil
 }

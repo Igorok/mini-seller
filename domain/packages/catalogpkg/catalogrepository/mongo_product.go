@@ -2,7 +2,7 @@ package catalogrepository
 
 import (
 	"context"
-	"mini-seller/domain/common/entities/catalogentity"
+	"mini-seller/domain/common/entities/productentity"
 	"mini-seller/domain/packages/catalogpkg"
 	"time"
 
@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (cRepo Repository) GetProductList(contx context.Context, ids_organization []string, ids_category []string) ([]*catalogentity.ProductInfo, error) {
+func (cRepo Repository) GetProductList(contx context.Context, ids_organization []string, ids_category []string) ([]*productentity.Product, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -52,24 +52,24 @@ func (cRepo Repository) GetProductList(contx context.Context, ids_organization [
 	}
 
 	// format data from cursor
-	products := make([]*catalogentity.ProductInfo, 0)
+	products := make([]*productentity.Product, 0)
 	defer cursor.Close(ctx)
 
 	for cursor.Next(ctx) {
-		prodMongo := catalogentity.ProductInfoMongo{}
+		prodMongo := productentity.ProductMongo{}
 		err := cursor.Decode(&prodMongo)
 		if err != nil {
 			return nil, err
 		}
-		product := catalogentity.ToProductInfo(prodMongo)
-		products = append(products, &product)
+		product := productentity.ToProduct(&prodMongo)
+		products = append(products, product)
 	}
 
 	// answer
 	return products, nil
 }
 
-func (cRepo Repository) GetProductDetail(contx context.Context, id string) (*catalogentity.ProductInfo, error) {
+func (cRepo Repository) GetProductDetail(contx context.Context, id string) (*productentity.Product, error) {
 	// convert id to bson
 	ID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -81,15 +81,15 @@ func (cRepo Repository) GetProductDetail(contx context.Context, id string) (*cat
 	defer cancel()
 
 	// context
-	prodMongo := catalogentity.ProductInfoMongo{}
+	prodMongo := productentity.ProductMongo{}
 	err = cRepo.db.Collection("products").FindOne(ctx, bson.M{"_id": ID, "status": catalogpkg.StatusActive}).Decode(&prodMongo)
 	if err != nil {
 		return nil, err
 	}
 
 	// convert to entity
-	product := catalogentity.ToProductInfo(prodMongo)
+	product := productentity.ToProduct(&prodMongo)
 
 	// answer
-	return &product, nil
+	return product, nil
 }

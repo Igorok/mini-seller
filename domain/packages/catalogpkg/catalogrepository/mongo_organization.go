@@ -2,7 +2,7 @@ package catalogrepository
 
 import (
 	"context"
-	"mini-seller/domain/common/entities/catalogentity"
+	"mini-seller/domain/common/entities/organizationentity"
 	"mini-seller/domain/packages/catalogpkg"
 	"time"
 
@@ -12,7 +12,7 @@ import (
 )
 
 // GetOrganizationList - list with active organizations
-func (cRepo Repository) GetOrganizationList(contx context.Context) ([]*catalogentity.OrganizationInfo, error) {
+func (cRepo Repository) GetOrganizationList(contx context.Context) ([]*organizationentity.Organization, error) {
 	// get context
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -26,17 +26,17 @@ func (cRepo Repository) GetOrganizationList(contx context.Context) ([]*catalogen
 	}
 
 	// format data from cursor
-	organizations := make([]*catalogentity.OrganizationInfo, 0)
+	organizations := make([]*organizationentity.Organization, 0)
 	defer cursor.Close(ctx)
 
 	for cursor.Next(ctx) {
-		orgMongo := catalogentity.OrganizationInfoMongo{}
+		orgMongo := organizationentity.OrganizationMongo{}
 		err := cursor.Decode(&orgMongo)
 		if err != nil {
 			return nil, err
 		}
-		org := catalogentity.ToOrganizationInfo(orgMongo)
-		organizations = append(organizations, &org)
+		org := organizationentity.ToEntity(&orgMongo)
+		organizations = append(organizations, org)
 	}
 
 	// answer
@@ -46,9 +46,9 @@ func (cRepo Repository) GetOrganizationList(contx context.Context) ([]*catalogen
 /*
 GetOrganizationDetail - get detail info about organization
 @param {String} id - id of organization
-@return catalogentity.OrganizationInfo, error - detail info and error
+@return organizationentity.Organization, error - detail info and error
 */
-func (cRepo Repository) GetOrganizationDetail(contx context.Context, id string) (*catalogentity.OrganizationInfo, error) {
+func (cRepo Repository) GetOrganizationDetail(contx context.Context, id string) (*organizationentity.Organization, error) {
 	// convert id to bson
 	ID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -60,15 +60,15 @@ func (cRepo Repository) GetOrganizationDetail(contx context.Context, id string) 
 	defer cancel()
 
 	// context
-	orgMongo := catalogentity.OrganizationInfoMongo{}
+	orgMongo := organizationentity.OrganizationMongo{}
 	err = cRepo.db.Collection("organizations").FindOne(ctx, bson.M{"_id": ID, "status": catalogpkg.StatusActive}).Decode(&orgMongo)
 	if err != nil {
 		return nil, err
 	}
 
 	// convert to entity
-	organization := catalogentity.ToOrganizationInfo(orgMongo)
+	organization := organizationentity.ToEntity(&orgMongo)
 
 	// answer
-	return &organization, nil
+	return organization, nil
 }
