@@ -14,6 +14,6 @@ import (
 type Resolver struct {
 	CatalogUseCase catalogpkg.IUseCase
 
-	todos         []*model.Todo
 	organizations []*model.Organization
+	product       *model.Product
 }

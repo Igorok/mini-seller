@@ -5,28 +5,11 @@ package resolvers
 
 import (
 	"context"
-	"fmt"
-	"math/rand"
 	"mini-seller/application/graph/generated"
 	"mini-seller/application/graph/model"
 
 	"github.com/prometheus/common/log"
 )
-
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	todo := &model.Todo{
-		Text: input.Text,
-		ID:   fmt.Sprintf("T%d", rand.Int()),
-		// User: &model.User{ID: input.UserID, Name: "user " + input.UserID},
-		UserID: input.UserID, // fix this line
-	}
-	r.todos = append(r.todos, todo)
-	return todo, nil
-}
-
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	return r.todos, nil
-}
 
 func (r *queryResolver) Organizations(ctx context.Context) ([]*model.Organization, error) {
 	orgs, err := r.CatalogUseCase.GetOrganizationList(ctx)
@@ -53,11 +36,30 @@ func (r *queryResolver) Organizations(ctx context.Context) ([]*model.Organizatio
 	return organizations, err
 }
 
-// Mutation returns generated.MutationResolver implementation.
-func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
+func (r *queryResolver) Product(ctx context.Context, id string) (*model.Product, error) {
+	prod, err := r.CatalogUseCase.GetProductDetail(ctx, id)
+	if err != nil {
+		log.Warn(err)
+		return nil, err
+	}
+	if prod == nil {
+		return nil, nil
+	}
+
+	product := &model.Product{
+		ID:             prod.ID,
+		IDCategory:     prod.IDCategory,
+		IDOrganization: prod.IDOrganization,
+		Name:           prod.Name,
+		Price:          prod.Price,
+		Count:          prod.Count,
+		Status:         prod.Status,
+	}
+
+	return product, nil
+}
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
-type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
