@@ -5,6 +5,7 @@ import (
 	"os"
 	"testing"
 
+	"mini-seller/domain/packages/catalogpkg"
 	"mini-seller/domain/packages/catalogpkg/catalogrepository"
 
 	"github.com/stretchr/testify/assert"
@@ -42,6 +43,9 @@ func TestGetOrganizationDetail(t *testing.T) {
 	organization, err := catalogUseCase.GetOrganizationDetail(context.TODO(), "6043d76e94df8de741c2c0d6")
 	assert.Nil(t, err)
 	assert.Equal(t, organization.Name, "restaurant")
+
+	organization, err = catalogUseCase.GetOrganizationDetail(context.TODO(), "")
+	assert.Equal(t, err, catalogpkg.ErrOrganizationNotFound)
 }
 
 func TestGetCategoryList(t *testing.T) {
@@ -98,4 +102,7 @@ func TestGetProductDetail(t *testing.T) {
 	product, err := catalogUseCase.GetProductDetail(context.TODO(), "604497558ffcad558eb8e1f4")
 	assert.Nil(t, err)
 	assert.Equal(t, product.Name, "Salad Cesar")
+
+	product, err = catalogUseCase.GetProductDetail(context.TODO(), "")
+	assert.Equal(t, err, catalogpkg.ErrProductNotFound)
 }
